@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini WhatsApp</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/script.js" defer></script>
+</head>
+<body>
+    <main class="page-shell">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Chat board</p>
+                <h1>All Chats</h1>
+            </div>
+            <a class="button" href="/chats/new">New Chat</a>
+        </header>
+
+        <% if (chats.length === 0) { %>
+            <section class="empty-state">
+                <h2>No chats yet</h2>
+                <p>Create the first chat to see it here.</p>
+                <a class="button" href="/chats/new">Create Chat</a>
+            </section>
+        <% } else { %>
+            <section class="chat-grid">
+                <% for (let chat of chats) { %>
+                    <article class="chat-card">
+                        <div class="chat-meta">
+                            <span>From <strong><%= chat.from %></strong></span>
+                            <span>To <strong><%= chat.to %></strong></span>
+                        </div>
+
+                        <p class="message"><%= chat.msg %></p>
+
+                        <footer class="chat-footer">
+                            <time datetime="<%= chat.created_at.toISOString() %>">
+                                <%= chat.created_at.toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) %>
+                            </time>
+                            <div class="actions">
+                                <a class="button secondary" href="/chats/<%= chat._id %>/edit">Edit</a>
+                                <form method="POST" action="/chats/<%= chat._id %>?_method=DELETE" onsubmit="return confirmDelete()">
+                                    <button class="button danger" type="submit">Delete</button>
+                                </form>
+                            </div>
+                        </footer>
+                    </article>
+                <% } %>
+            </section>
+        <% } %>
+    </main>
+</body>
+</html>
